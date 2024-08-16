@@ -19,24 +19,29 @@ public class yes : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (videoPlayer.isPlaying == false)
-        {
-            ShowRandomImage();
-        }
-
+        videoPlayer.loopPointReached += EndReached;
     }
 
     public async void ShowRandomImage()
     {
-        //Get a single random result
         var randomResult = await GiphyQuery.Random(apiKey, searchKeywords);
-
-        //Display the random image result using Unity's video player
         videoPlayer.source = VideoSource.Url;
         videoPlayer.url = randomResult.Data.Images.OriginalMp4.Mp4;
         videoPlayer.Play();
         
     }
+    void EndReached(UnityEngine.Video.VideoPlayer vp)
+    {
+        EndReachFunc();
+    }
+
+    IEnumerator EndReachFunc()
+    {
+        yield return new WaitForSeconds(2);
+        ShowRandomImage();
+    }
 }
+
+
 
 
